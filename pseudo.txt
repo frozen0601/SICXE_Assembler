@@ -1,0 +1,93 @@
+pass 1:
+   #[1] Formatting
+   format()
+
+   #[2.1] Build SBtable
+   if == START
+      Set starting point 
+
+   elif hasLabel(line)
+      if isSymbol(label)
+         error(redefined)
+      else
+         save to symbol table
+
+
+   #[2.2] Add location info/ Save BASE location
+   if mnemonic in ["START", "END", "BASE"]:
+      lineLength = 0
+   elif mnemonic in ["RESB", "RESW", "WORD", "BYTE"]:
+      return their lineLength (lineLength, lineLength*3, 3, lookupXC)
+   elif mnemonic in OPtable:
+      return OP's format length
+   curLoc += length
+
+   #[3]
+   dump everything before START
+   dump everything after END
+   Get rid off unformatted code(too many things)
+   update intermediate file
+   save intermediate file
+
+pass 2:
+   find BASE's operand from symbol table:
+      not found -> no BASE
+      found -> save base to symbol table
+
+   if == END:
+      ADD modification record
+      add last T's length
+      print E line
+
+   if == START:
+      print H line
+      set startPos
+
+   set pc location
+   get line's format(1,2,3/4)
+
+   if line == BYTE:
+      if start with X:
+         addObjectcode
+      if start with C:
+         transfer to HEX then addObjectcode
+         
+   if line == WORD:
+      addObjectcode
+
+
+
+
+   if lineFormat == 1                        
+      assemble opcode directly as 1 byte
+   elif lineFormat == 2
+      assemble opcode + 1 byte register(s)
+   elif lineFormat == 3 or 4
+      if isImmediate(operand):
+         if operand isdigit():
+            if 0 <= operand < 4096:
+               assemble(opcode + flags 010000 + 12 bit disp)
+            elif 4096 <= operand < 1048576 and + before opcode:
+               assemble(opcode + flags 010001 + 20 bit disp(immediate))
+            else
+               error(immediate number out of range)
+      
+      elif operand != RSUB {  
+         if mnemonic.startswith("+"):
+            if operand.startswith("@"): 
+               assemble(opcode + 100001 + 20 bit disp)
+            else:
+               assemble(opcode + 110001 + 20 bit disp)
+
+         if operand in SBtable:
+            nixbpe = "110000"
+            if has #, set n to 0
+            if has @, set i to 0
+            if has ,, set x to 1
+            flag = find it's BASE or PC
+            if flag == BASE, set B to 1
+            if flag == PC, set P to 1
+            assemble(opcode + nixbpe + 12 bit disp)
+
+      else:
+         4C0000
